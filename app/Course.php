@@ -34,4 +34,14 @@ class Course extends Model
     {
         return $this->belongsTo('App\Exam');
     }
+
+    public function gradingWeights()
+    {
+        return $this->hasMany(CourseGradingWeight::class);
+    }
+
+    public function quarterlyGrades()
+    {
+        return $this->hasMany(QuarterlyGrade::class);
+    }
 }
