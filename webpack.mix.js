@@ -28,3 +28,7 @@ mix.styles([
 mix.styles([
     'resources/assets/theme/application/css/loader.css',
 ], 'public/css/loader.css')
+
+mix.styles([
+    'resources/assets/theme/landing/css/smartcampus-landing.css',
+], 'public/css/smartcampus-landing.css')
