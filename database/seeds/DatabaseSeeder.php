@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(NotificationsTableSeeder::class);
         $this->call(ExamsTableSeeder::class);
         $this->call(GradesystemsTableSeeder::class);
+        $this->call(DepedGradingTableSeeder::class);
         $this->call(CoursesTableSeeder::class);
         $this->call(GradesTableSeeder::class);
         $this->call(ExamForClassesTableSeeder::class);

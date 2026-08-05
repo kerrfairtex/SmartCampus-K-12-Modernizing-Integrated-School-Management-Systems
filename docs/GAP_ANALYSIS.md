@@ -146,8 +146,9 @@ Upgrade is a prerequisite before long-term maintenance but not blocking initial 
 
 ### Phase 2 — DepEd Core
 
-- [ ] Quarterly grade schema and computation service
-- [ ] DepEd transmutation and descriptor tables
+- [x] Quarterly grade schema (`school_years`, `quarters`, `quarterly_grades`, `quarterly_component_scores`)
+- [x] DepEd transmutation tables and descriptor mapping (`deped_transmutation_tables`, `config/deped_grading.php`)
+- [x] `DepEdGradingService` — WW/PT/QA computation, transmutation, final grade average
 - [ ] SF9 report card PDF generation
 - [ ] Parent role and portal (minimal)
 
