@@ -8,7 +8,7 @@ SmartCampus K–12 is a custom web application that combines DepEd-compliant wor
 
 ## Base Architecture
 
-This repository uses [abdulwahid880/School-Management-system-in-laravel-](https://github.com/abdulwahid880/School-Management-system-in-laravel-) (Unifiedtransform fork) as its foundation:
+This repository use as its foundation:
 
 - Laravel 5.5 MVC with services layer
 - Roles: Master, Admin, Teacher, Student, Librarian, Accountant
