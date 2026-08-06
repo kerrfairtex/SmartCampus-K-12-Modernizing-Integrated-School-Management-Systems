@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="sc-auth-page">
-    <div class="sc-auth-brand">
+    <div class="sc-auth-brand" style="background-image: linear-gradient(160deg, rgba(6,58,82,0.92), rgba(13,92,74,0.88)), url('{{ asset('images/smartcampus-hero.png') }}'); background-size: cover; background-position: center;">
         <a href="{{ url('/') }}" class="sc-logo" style="color: #fff;">
             <div class="sc-logo-mark">SC</div>
             <div class="sc-logo-text" style="color: #fff;">

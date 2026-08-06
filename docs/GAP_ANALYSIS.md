@@ -150,7 +150,7 @@ Upgrade is a prerequisite before long-term maintenance but not blocking initial 
 - [x] DepEd transmutation tables and descriptor mapping (`deped_transmutation_tables`, `config/deped_grading.php`)
 - [x] `DepEdGradingService` — WW/PT/QA computation, transmutation, final grade average
 - [ ] SF9 report card PDF generation
-- [ ] Parent role and portal (minimal)
+- [x] Parent role and portal (minimal)
 
 ### Phase 3 — Regional & Quality
 

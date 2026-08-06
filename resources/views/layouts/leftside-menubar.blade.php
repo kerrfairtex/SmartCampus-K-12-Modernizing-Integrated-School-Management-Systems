@@ -104,6 +104,9 @@
   <li class="nav-item">
     <a class="nav-link" href="{{ route('settings.index') }}"><i class="material-icons">settings</i> <span class="nav-link-text">@lang('Academic Settings')</span></a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('school-years.index') }}"><i class="material-icons">event_note</i> <span class="nav-link-text">School Years (DepEd)</span></a>
+  </li>
   <li class="nav-item dropdown">
     <a role="button" href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
         class="material-icons">chrome_reader_mode</i> <span class="nav-link-text">@lang('Manage GPA')</span> <i class="material-icons pull-right">keyboard_arrow_down</i></a>
@@ -181,10 +184,20 @@
         class="nav-link-text">@lang('My Grade')</span></a>
   </li>
   <li class="nav-item">
+    <a class="nav-link" href="{{ route('deped.student-quarterly') }}"><i class="material-icons">assessment</i>
+      <span class="nav-link-text">Quarterly Grades (DepEd)</span></a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" href="{{url('stripe/charge')}}"><i class="material-icons">payment</i> <span class="nav-link-text">@lang('Payment')</span></a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{{url('stripe/receipts')}}"><i class="material-icons">receipt</i> <span class="nav-link-text">@lang('Receipt')</span></a>
+  </li>
+  @endif
+  @if(Auth::user()->role == 'parent')
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('parent.dashboard') }}"><i class="material-icons">supervisor_account</i>
+      <span class="nav-link-text">My Children</span></a>
   </li>
   @endif
   {{--<div style="text-align:center;">@lang('Student')</div>--}}
@@ -222,6 +235,10 @@
   <li class="nav-item">
     <a class="nav-link" href="{{ url('courses/'.Auth::user()->id.'/0') }}"><i class="material-icons">import_contacts</i>
       <span class="nav-link-text">@lang('My Courses')</span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('deped.teacher-courses') }}"><i class="material-icons">assignment_turned_in</i>
+      <span class="nav-link-text">DepEd Grade Entry</span></a>
   </li>
   @endif
 </ul>

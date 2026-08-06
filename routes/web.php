@@ -28,6 +28,29 @@ Route::middleware(['auth', 'master'])->group(function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::middleware(['auth', 'admin'])->prefix('academic')->group(function () {
+    Route::get('school-years', 'SchoolYearController@index')->name('school-years.index');
+    Route::post('school-years', 'SchoolYearController@store')->name('school-years.store');
+});
+
+Route::middleware(['auth'])->prefix('deped')->name('deped.')->group(function () {
+    Route::get('teacher-courses', 'DepEdGradingController@teacherCourses')->name('teacher-courses');
+    Route::get('entry/{courseId}/{quarterId}', 'DepEdGradingController@entryForm')->name('entry');
+    Route::post('entry/{courseId}/{quarterId}', 'DepEdGradingController@storeScores')->name('scores.store');
+    Route::get('section/{sectionId}/quarter/{quarterId}', 'DepEdGradingController@sectionGrades')->name('section-grades');
+    Route::get('student/quarterly/{studentId?}', 'DepEdGradingController@studentQuarterly')->name('student-quarterly');
+});
+
+Route::middleware(['auth'])->prefix('reports')->name('reports.')->group(function () {
+    Route::get('sf9/{studentId}/{schoolYearId?}', 'ReportController@sf9')->name('sf9');
+});
+
+Route::middleware(['auth', 'parent'])->prefix('parent')->name('parent.')->group(function () {
+    Route::get('dashboard', 'ParentController@dashboard')->name('dashboard');
+    Route::get('child/{studentId}/grades', 'ParentController@childGrades')->name('child.grades');
+    Route::get('child/{studentId}/attendance', 'ParentController@childAttendance')->name('child.attendance');
+});
+
 Route::middleware(['auth'])->group(function (){
   Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
   // Route::get('/view-attendance/section/{section_id}',function($section_id){

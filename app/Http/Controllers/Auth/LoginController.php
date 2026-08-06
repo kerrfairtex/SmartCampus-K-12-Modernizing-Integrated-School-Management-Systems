@@ -36,7 +36,13 @@ class LoginController extends Controller
     {
         $role = Auth::user()->role;
 
-        return ($role == 'master')?'/masters':'/home';
+        if ($role == 'master') {
+            return '/masters';
+        }
+        if ($role == 'parent') {
+            return '/parent/dashboard';
+        }
+        return '/home';
     }
 
     public function username()
