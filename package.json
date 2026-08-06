@@ -16,9 +16,12 @@
     "jquery": "^4.0",
     "laravel-mix": "^6.0",
     "lodash": "^4.18.1",
+    "prisma": "^7.9.1",
     "vue": "^2.5.7"
   },
   "dependencies": {
+    "@supabase/server": "^1.4.1",
+    "@supabase/supabase-js": "^2.112.1",
     "blueimp-file-upload": "^9.22.0",
     "bootstrap": "^5.3.8",
     "bootswatch": "^3.3.7"
