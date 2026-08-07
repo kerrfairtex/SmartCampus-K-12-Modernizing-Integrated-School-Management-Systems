@@ -18,7 +18,7 @@ This repository is currently Laravel 5.5-era code. The serverless baseline in th
 1. Managed MySQL (RDS/PlanetScale/etc.)
 2. Managed Redis (Elasticache/Upstash/Redis Cloud/etc.)
 3. S3 bucket for uploaded files
-4. AWS credentials and IAM permissions for Lambda + API Gateway + S3
+4. IAM permissions for Lambda + API Gateway + S3 (prefer Lambda execution role, not static AWS keys in env vars)
 
 ## Environment setup
 

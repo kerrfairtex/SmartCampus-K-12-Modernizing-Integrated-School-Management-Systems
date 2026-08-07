@@ -31,10 +31,11 @@ class UploadController extends Controller {
     ]);
 
     $upload_dir = 'school-'.auth()->user()->school_id.'/'.date("Y").'/'.$request->upload_type;
-    $uploadDisk = config('filesystems.uploads_disk', 'public');
-    $path = \Storage::disk($uploadDisk)->putFile($upload_dir, $request->file('file'));//$request->file('file')->store($upload_dir);
-    $filePath = ($path) ? \Storage::disk($uploadDisk)->url($path) : null;
-    $storedFilePath = ($path && in_array($uploadDisk, ['public', 'local'], true)) ? 'storage/'.$path : $filePath;
+    $uploadDisk = config('serverless.uploads_disk', 'public');
+    $resolvedUploadDisk = ($uploadDisk === 'local') ? 'public' : $uploadDisk;
+    $path = \Storage::disk($resolvedUploadDisk)->putFile($upload_dir, $request->file('file'));//$request->file('file')->store($upload_dir);
+    $filePath = ($path) ? \Storage::disk($resolvedUploadDisk)->url($path) : null;
+    $storedFilePath = ($path && $resolvedUploadDisk === 'public') ? 'storage/'.$path : $filePath;
     
     if($request->upload_type == 'notice'){
       $request->validate([
