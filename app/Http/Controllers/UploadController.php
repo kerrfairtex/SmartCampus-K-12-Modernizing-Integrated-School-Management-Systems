@@ -31,7 +31,7 @@ class UploadController extends Controller {
     ]);
 
     $upload_dir = 'school-'.auth()->user()->school_id.'/'.date("Y").'/'.$request->upload_type;
-    $uploadDisk = env('UPLOADS_DISK', 'public');
+    $uploadDisk = config('filesystems.uploads_disk', 'public');
     $path = \Storage::disk($uploadDisk)->putFile($upload_dir, $request->file('file'));//$request->file('file')->store($upload_dir);
     $filePath = ($path) ? \Storage::disk($uploadDisk)->url($path) : null;
     

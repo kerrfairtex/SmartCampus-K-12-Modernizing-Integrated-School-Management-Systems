@@ -22,7 +22,7 @@ provider:
     UPLOADS_DISK: ${env:UPLOADS_DISK, 's3'}
     REDIS_HOST: ${env:REDIS_HOST}
     REDIS_PORT: ${env:REDIS_PORT, '6379'}
-    REDIS_PASSWORD: ${env:REDIS_PASSWORD, 'null'}
+    REDIS_PASSWORD: ${env:REDIS_PASSWORD, ''}
     AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
     AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
     AWS_DEFAULT_REGION: ${env:AWS_DEFAULT_REGION}
@@ -49,3 +49,7 @@ package:
     - '!node_modules/**'
     - '!tests/**'
     - '!.git/**'
+    - '!storage/**'
+    - '!bootstrap/cache/**'
+    - '!resources/assets/**'
+    - '!public/hot'

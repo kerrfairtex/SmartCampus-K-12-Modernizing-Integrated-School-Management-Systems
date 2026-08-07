@@ -4,6 +4,8 @@ $isServerless = filter_var(env('APP_SERVERLESS', false), FILTER_VALIDATE_BOOLEAN
 
 return [
 
+    'uploads_disk' => env('UPLOADS_DISK', 'public'),
+
     /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
