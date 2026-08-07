@@ -32,8 +32,19 @@ class UploadController extends Controller {
 
     $upload_dir = 'school-'.auth()->user()->school_id.'/'.date("Y").'/'.$request->upload_type;
     $uploadDisk = config('serverless.uploads_disk', 'public');
+    // The "local" disk does not provide a public URL, so uploads are forced to the web-accessible local public disk.
     $resolvedUploadDisk = ($uploadDisk === 'local') ? 'public' : $uploadDisk;
     $path = \Storage::disk($resolvedUploadDisk)->putFile($upload_dir, $request->file('file'));
+
+    if (!$path) {
+      return response()->json([
+          'imgUrlpath' => null,
+          'path' => null,
+          'storage_key' => null,
+          'error' => true
+      ]);
+    }
+
     $filePath = ($path) ? \Storage::disk($resolvedUploadDisk)->url($path) : null;
     $storedFilePath = ($path && $resolvedUploadDisk === 'public') ? 'storage/'.$path : $filePath;
     
@@ -88,16 +99,11 @@ class UploadController extends Controller {
       $tb->save();
     }
 
-    return ($path)?response()->json([
+    return response()->json([
         'imgUrlpath' => $filePath,
         'path' => $storedFilePath,
         'storage_key' => $path,
         'error' => false
-    ]):response()->json([
-        'imgUrlpath' => null,
-        'path' => null,
-        'storage_key' => null,
-        'error' => true
     ]);
     // $options = ['upload_dir'=>'','upload_url'=>''];
     // new UploadHandler($options);

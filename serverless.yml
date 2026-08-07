@@ -24,6 +24,7 @@ provider:
     REDIS_HOST: ${env:REDIS_HOST}
     REDIS_PORT: ${env:REDIS_PORT, '6379'}
     REDIS_PASSWORD: ${env:REDIS_PASSWORD, ''}
+    # Do not inject AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY; use Lambda execution role permissions instead.
     AWS_DEFAULT_REGION: ${env:AWS_DEFAULT_REGION}
     AWS_BUCKET: ${env:AWS_BUCKET}
 
