@@ -24,8 +24,9 @@ const submit = () => {
 
                 <form @submit.prevent="submit">
                     <div class="mb-3">
-                        <label class="form-label">Email</label>
+                        <label class="form-label" for="email">Email</label>
                         <input
+                            id="email"
                             v-model="form.email"
                             type="email"
                             class="form-control"
@@ -36,8 +37,9 @@ const submit = () => {
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Password</label>
+                        <label class="form-label" for="password">Password</label>
                         <input
+                            id="password"
                             v-model="form.password"
                             type="password"
                             class="form-control"
