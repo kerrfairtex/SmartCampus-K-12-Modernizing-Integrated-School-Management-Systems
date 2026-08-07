@@ -33,7 +33,7 @@ class UploadController extends Controller {
     $upload_dir = 'school-'.auth()->user()->school_id.'/'.date("Y").'/'.$request->upload_type;
     $uploadDisk = config('serverless.uploads_disk', 'public');
     $resolvedUploadDisk = ($uploadDisk === 'local') ? 'public' : $uploadDisk;
-    $path = \Storage::disk($resolvedUploadDisk)->putFile($upload_dir, $request->file('file'));//$request->file('file')->store($upload_dir);
+    $path = \Storage::disk($resolvedUploadDisk)->putFile($upload_dir, $request->file('file'));
     $filePath = ($path) ? \Storage::disk($resolvedUploadDisk)->url($path) : null;
     $storedFilePath = ($path && $resolvedUploadDisk === 'public') ? 'storage/'.$path : $filePath;
     
@@ -91,10 +91,12 @@ class UploadController extends Controller {
     return ($path)?response()->json([
         'imgUrlpath' => $filePath,
         'path' => $storedFilePath,
+        'storage_key' => $path,
         'error' => false
     ]):response()->json([
         'imgUrlpath' => null,
         'path' => null,
+        'storage_key' => null,
         'error' => true
     ]);
     // $options = ['upload_dir'=>'','upload_url'=>''];

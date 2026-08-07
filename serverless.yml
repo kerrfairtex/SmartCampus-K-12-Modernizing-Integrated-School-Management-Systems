@@ -17,6 +17,7 @@ provider:
     DB_PASSWORD: ${env:DB_PASSWORD}
     CACHE_DRIVER: ${env:CACHE_DRIVER, 'redis'}
     SESSION_DRIVER: ${env:SESSION_DRIVER, 'redis'}
+    # Laravel 5.5 expects QUEUE_DRIVER (Laravel 5.7+ renamed this to QUEUE_CONNECTION).
     QUEUE_DRIVER: ${env:QUEUE_DRIVER, 'redis'}
     FILESYSTEM_DRIVER: ${env:FILESYSTEM_DRIVER, 's3'}
     UPLOADS_DISK: ${env:UPLOADS_DISK, 's3'}
