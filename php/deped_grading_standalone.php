@@ -15,7 +15,12 @@ use App\Core\DepedGrading\DepEdGradingCalculator;
 $input = '';
 
 if (isset($argv[1])) {
-    $input = (string) @file_get_contents($argv[1]);
+    if (!is_readable($argv[1])) {
+        fwrite(STDERR, "Input file is not readable: {$argv[1]}\n");
+        exit(1);
+    }
+
+    $input = (string) file_get_contents($argv[1]);
 } else {
     $input = (string) stream_get_contents(STDIN);
 }

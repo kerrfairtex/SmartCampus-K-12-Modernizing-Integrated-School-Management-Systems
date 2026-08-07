@@ -104,8 +104,8 @@ class DepEdGradingCalculator
 
         foreach ($codes as $field => $code) {
             if (isset($componentScores[$code])) {
-                $raw = (float) $componentScores[$code]['raw'];
-                $max = (float) $componentScores[$code]['max'];
+                $raw = (float) $this->getRowValue($componentScores[$code], 'raw', 0.0);
+                $max = (float) $this->getRowValue($componentScores[$code], 'max', 0.0);
                 $percentages[$code] = $this->computeComponentPercentage($raw, $max);
             }
         }
