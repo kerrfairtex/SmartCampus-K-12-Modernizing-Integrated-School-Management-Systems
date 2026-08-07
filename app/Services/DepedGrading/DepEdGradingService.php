@@ -2,9 +2,9 @@
 
 namespace App\Services\DepedGrading;
 
+use App\Core\DepedGrading\DepEdGradingCalculator;
 use App\Course;
 use App\CourseGradingWeight;
-use App\DepedTransmutationRow;
 use App\DepedTransmutationTable;
 use App\GradingComponentType;
 use App\Quarter;
@@ -16,18 +16,22 @@ use Illuminate\Support\Collection;
 
 class DepEdGradingService
 {
+    /** @var DepEdGradingCalculator */
+    protected $calculator;
+
+    public function __construct(?DepEdGradingCalculator $calculator = null)
+    {
+        $this->calculator = $calculator ?: new DepEdGradingCalculator(
+            new FrameworkGradingConfiguration()
+        );
+    }
+
     /**
      * Convert raw score to percentage (0–100).
      */
     public function computeComponentPercentage(float $rawScore, float $maxScore): float
     {
-        if ($maxScore <= 0) {
-            return 0.0;
-        }
-
-        $percent = ($rawScore / $maxScore) * 100;
-
-        return round(min(100, max(0, $percent)), 2);
+        return $this->calculator->computeComponentPercentage($rawScore, $maxScore);
     }
 
     /**
@@ -38,22 +42,7 @@ class DepEdGradingService
      */
     public function computeInitialGrade(array $componentPercentages, array $weights): float
     {
-        $totalWeight = 0;
-        $weightedSum = 0;
-
-        foreach ($weights as $code => $weight) {
-            if (!isset($componentPercentages[$code])) {
-                continue;
-            }
-            $weightedSum += $componentPercentages[$code] * $weight;
-            $totalWeight += $weight;
-        }
-
-        if ($totalWeight <= 0) {
-            return 0.0;
-        }
-
-        return round($weightedSum / $totalWeight, 2);
+        return $this->calculator->computeInitialGrade($componentPercentages, $weights);
     }
 
     /**
@@ -61,17 +50,7 @@ class DepEdGradingService
      */
     public function transmute(float $initialGrade, Collection $transmutationRows): float
     {
-        if ($transmutationRows->isEmpty()) {
-            return round($initialGrade, 2);
-        }
-
-        foreach ($transmutationRows as $row) {
-            if ($initialGrade >= (float) $row->from_score && $initialGrade <= (float) $row->to_score) {
-                return round((float) $row->transmuted_grade, 2);
-            }
-        }
-
-        return round($initialGrade, 2);
+        return $this->calculator->transmute($initialGrade, $transmutationRows->all());
     }
 
     /**
@@ -79,15 +58,7 @@ class DepEdGradingService
      */
     public function getDescriptor(float $grade): string
     {
-        $descriptors = config('deped_grading.descriptors', []);
-
-        foreach ($descriptors as $descriptor) {
-            if ($grade >= $descriptor['min'] && $grade <= $descriptor['max']) {
-                return $descriptor['code'];
-            }
-        }
-
-        return 'D';
+        return $this->calculator->getDescriptor($grade);
     }
 
     /**
@@ -102,29 +73,11 @@ class DepEdGradingService
         array $weights,
         Collection $transmutationRows
     ): array {
-        $codes = config('deped_grading.component_codes');
-        $percentages = [];
-
-        foreach ($codes as $field => $code) {
-            if (isset($componentScores[$code])) {
-                $percentages[$code] = $this->computeComponentPercentage(
-                    $componentScores[$code]['raw'],
-                    $componentScores[$code]['max']
-                );
-            }
-        }
-
-        $initialGrade = $this->computeInitialGrade($percentages, $weights);
-        $transmutedGrade = $this->transmute($initialGrade, $transmutationRows);
-
-        return [
-            'written_work_percent' => $percentages[$codes['written_work']] ?? null,
-            'performance_task_percent' => $percentages[$codes['performance_task']] ?? null,
-            'quarterly_assessment_percent' => $percentages[$codes['quarterly_assessment']] ?? null,
-            'initial_grade' => $initialGrade,
-            'transmuted_grade' => $transmutedGrade,
-            'descriptor' => $this->getDescriptor($transmutedGrade),
-        ];
+        return $this->calculator->computeQuarterlyGrade(
+            $componentScores,
+            $weights,
+            $transmutationRows->all()
+        );
     }
 
     /**
@@ -236,11 +189,7 @@ class DepEdGradingService
      */
     public function computeFinalGrade(array $quarterlyTransmutedGrades): float
     {
-        if (empty($quarterlyTransmutedGrades)) {
-            return 0.0;
-        }
-
-        return round(array_sum($quarterlyTransmutedGrades) / count($quarterlyTransmutedGrades), 2);
+        return $this->calculator->computeFinalGrade($quarterlyTransmutedGrades);
     }
 
     /**
