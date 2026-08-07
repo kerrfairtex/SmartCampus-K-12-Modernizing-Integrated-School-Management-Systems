@@ -46,7 +46,7 @@ services:
     environment:
       POSTGRES_DB: school
       POSTGRES_USER: ${DB_USERNAME:-school_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD env var is required}
       SERVICE_TAGS: dev
       SERVICE_NAME: postgres
     volumes:
