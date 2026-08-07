@@ -35,24 +35,22 @@ services:
     networks:
       - app-network
 
-  #MySQL Service
+  #PostgreSQL Service
   db:
-    image: mysql:5.7.22
+    image: postgres:15-alpine
     container_name: db
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_DATABASE: school
-      MYSQL_ROOT_PASSWORD: x12345678y
-      MYSQL_USER: root
-      MYSQL_PASSWORD: x12345678y
+      POSTGRES_DB: school
+      POSTGRES_USER: ${DB_USERNAME:-school_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      SERVICE_NAME: postgres
     volumes:
-      - dbdata:/var/lib/mysql/
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - dbdata:/var/lib/postgresql/data/
     networks:
       - app-network
 
