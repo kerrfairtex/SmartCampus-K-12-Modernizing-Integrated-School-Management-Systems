@@ -6,40 +6,42 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
-     * Create a new controller instance.
+     * Where to redirect users after login.
      *
-     * @return void
+     * @var string
+     */
+    protected $redirectTo = '/home';
+
+    /**
+     * Create a new controller instance.
      */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectTo()
+    /**
+     * Show the login form via Inertia.
+     */
+    public function showLoginForm()
     {
-        $role = Auth::user()->role;
-
-        return ($role == 'master')?'/masters':'/home';
+        return Inertia::render('Auth/Login');
     }
 
-    public function username()
+    public function redirectTo(): string
+    {
+        $role = Auth::user()->role;
+        return ($role === 'master') ? '/masters' : '/home';
+    }
+
+    public function username(): string
     {
         $login = request()->input('email');
         $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
@@ -47,10 +49,11 @@ class LoginController extends Controller
         return $field;
     }
 
-    public function credentials(Request $request)
+    public function credentials(Request $request): array
     {
-        $credentials = $request->only($this->username(), 'password');
-        $credentials = array_add($credentials, 'active', '1');
-        return $credentials;
+        return array_merge(
+            $request->only($this->username(), 'password'),
+            ['active' => '1'],
+        );
     }
 }

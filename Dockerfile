@@ -1,12 +1,21 @@
-FROM php:7.2-fpm
+# ─── Stage 1: Build frontend assets ───────────────────────────────────────────
+FROM node:20-alpine AS frontend
 
-# Copy composer.lock and composer.json
-COPY composer.lock composer.json /var/www/
+WORKDIR /app
 
-# Set working directory
-WORKDIR /var/www
+COPY package.json package-lock.json* ./
+RUN npm ci
 
-# Install dependencies
+COPY resources ./resources
+COPY vite.config.js ./
+COPY public ./public
+
+RUN npm run build
+
+# ─── Stage 2: PHP-FPM runtime ──────────────────────────────────────────────────
+FROM php:8.3-fpm
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
@@ -16,38 +25,37 @@ RUN apt-get update && apt-get install -y \
     locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
-    vim \
     unzip \
     git \
-    curl
+    curl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install extensions
+# Install PHP extensions
 RUN docker-php-ext-install pdo_pgsql pgsql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
-RUN docker-php-ext-install gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Add user for Laravel application
+RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy existing application directory contents
-COPY . /var/www
+WORKDIR /var/www
 
-# Copy existing application directory permissions
+# Copy application source
 COPY --chown=www:www . /var/www
 
-# Give laravel permission to storage folder
-RUN chmod -R 775 storage
+# Copy built frontend assets from Stage 1
+COPY --from=frontend --chown=www:www /app/public/build /var/www/public/build
 
-# Change current user to www
+# Install PHP dependencies (production only)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Set storage permissions
+RUN chmod -R 775 storage bootstrap/cache
+
 USER www
 
-# Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]

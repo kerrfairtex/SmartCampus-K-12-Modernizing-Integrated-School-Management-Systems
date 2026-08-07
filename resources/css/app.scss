@@ -1,0 +1,12 @@
+// Bootstrap 5
+@import 'bootstrap/scss/bootstrap';
+
+// Application styles
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+// Keep existing loader styles
+.loader-wrapper {
+    display: none;
+}

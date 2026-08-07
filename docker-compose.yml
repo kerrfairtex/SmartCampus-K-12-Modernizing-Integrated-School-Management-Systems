@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
 
   #PHP Service
@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: digitalocean.com/php
+    image: smartcampus/app
     container_name: app
     restart: unless-stopped
     tty: true
@@ -19,6 +19,9 @@ services:
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
+    depends_on:
+      db:
+        condition: service_healthy
 
   #Nginx Service
   webserver:
@@ -34,6 +37,8 @@ services:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     networks:
       - app-network
+    depends_on:
+      - app
 
   #PostgreSQL Service
   db:
@@ -53,11 +58,17 @@ services:
       - dbdata:/var/lib/postgresql/data/
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-school_user} -d school"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 #Docker Networks
 networks:
   app-network:
     driver: bridge
+
 #Volumes
 volumes:
   dbdata:

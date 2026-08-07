@@ -4,7 +4,7 @@ namespace App;
 
 use App\Model;
 use Laravel\Cashier\Billable;
-use Laravel\Passport\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Lab404\Impersonate\Models\Impersonate;
@@ -24,19 +24,31 @@ class User extends Model implements
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'code',/* school code*/'student_code', 'active', 'verified', 'school_id', 'section_id', 'address', 'about', 'phone_number', 'blood_group', 'nationality', 'gender', 'department_id',
+        'name', 'email', 'password', 'role', 'code', 'student_code', 'active', 'verified',
+        'school_id', 'section_id', 'address', 'about', 'phone_number', 'blood_group',
+        'nationality', 'gender', 'department_id',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password'          => 'hashed',
     ];
 
     public function scopeStudent($q)
@@ -56,23 +68,26 @@ class User extends Model implements
 
     public function department()
     {
-        return $this->belongsTo('App\Department','department_id', 'id');
+        return $this->belongsTo('App\Department', 'department_id', 'id');
     }
 
-    public function studentInfo(){
-        return $this->hasOne('App\StudentInfo','student_id');
+    public function studentInfo()
+    {
+        return $this->hasOne('App\StudentInfo', 'student_id');
     }
 
-    public function studentBoardExam(){
-        return $this->hasMany('App\StudentBoardExam','student_id');
+    public function studentBoardExam()
+    {
+        return $this->hasMany('App\StudentBoardExam', 'student_id');
     }
 
-    public function notifications(){
-        return $this->hasMany('App\Notification','student_id');
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification', 'student_id');
     }
 
     public function hasRole(string $role): bool
     {
-        return $this->role == $role ? true : false;
+        return $this->role === $role;
     }
 }
