@@ -31,8 +31,9 @@ class UploadController extends Controller {
     ]);
 
     $upload_dir = 'school-'.auth()->user()->school_id.'/'.date("Y").'/'.$request->upload_type;
-
-    $path = \Storage::disk('public')->putFile($upload_dir, $request->file('file'));//$request->file('file')->store($upload_dir);
+    $uploadDisk = env('UPLOADS_DISK', 'public');
+    $path = \Storage::disk($uploadDisk)->putFile($upload_dir, $request->file('file'));//$request->file('file')->store($upload_dir);
+    $filePath = ($path) ? \Storage::disk($uploadDisk)->url($path) : null;
     
     if($request->upload_type == 'notice'){
       $request->validate([
@@ -40,7 +41,7 @@ class UploadController extends Controller {
       ]);
       
       $tb = new \App\Notice;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $filePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -51,7 +52,7 @@ class UploadController extends Controller {
         'title' => 'required|string',
       ]);
       $tb = new \App\Event;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $filePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -62,7 +63,7 @@ class UploadController extends Controller {
         'title' => 'required|string',
       ]);
       $tb = new \App\Routine;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $filePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -73,7 +74,7 @@ class UploadController extends Controller {
         'title' => 'required|string',
       ]);
       $tb = new \App\Syllabus;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $filePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -81,13 +82,13 @@ class UploadController extends Controller {
       $tb->save();
     } else if($request->upload_type == 'profile' && $request->user_id > 0){
       $tb = \App\User::find($request->user_id);
-      $tb->pic_path = 'storage/'.$path;
+      $tb->pic_path = $filePath;
       $tb->save();
     }
 
     return ($path)?response()->json([
-        'imgUrlpath' => url('storage/'.$path),
-        'path' => 'storage/'.$path,
+        'imgUrlpath' => $filePath,
+        'path' => $filePath,
         'error' => false
     ]):response()->json([
         'imgUrlpath' => null,

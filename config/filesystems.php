@@ -1,5 +1,7 @@
 <?php
 
+$isServerless = filter_var(env('APP_SERVERLESS', false), FILTER_VALIDATE_BOOLEAN);
+
 return [
 
     /*
@@ -13,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DRIVER', $isServerless ? 's3' : 'local'),
 
     /*
     |--------------------------------------------------------------------------
