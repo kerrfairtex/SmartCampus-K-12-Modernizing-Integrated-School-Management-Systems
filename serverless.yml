@@ -50,6 +50,7 @@ package:
     - '!tests/**'
     - '!.git/**'
     - '!storage/**'
+    - 'storage/framework/**'
     - '!bootstrap/cache/**'
     - '!resources/assets/**'
     - '!public/hot'
