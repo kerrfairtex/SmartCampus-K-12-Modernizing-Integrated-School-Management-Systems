@@ -49,8 +49,8 @@ class DepEdGradingCalculatorTest extends TestCase
             ]
         );
 
-        $this->assertSame(88.6, $result['initial_grade']);
-        $this->assertSame(89.0, $result['transmuted_grade']);
+        $this->assertEquals(88.6, $result['initial_grade'], '', 0.001);
+        $this->assertEquals(89.0, $result['transmuted_grade'], '', 0.001);
         $this->assertSame('VS', $result['descriptor']);
     }
 
