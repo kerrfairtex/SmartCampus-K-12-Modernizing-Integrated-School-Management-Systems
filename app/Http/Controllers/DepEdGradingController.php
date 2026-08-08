@@ -40,8 +40,19 @@ class DepEdGradingController extends Controller
     {
         $this->authorizeTeacher();
 
-        $course = Course::with('section')->findOrFail($courseId);
+        $course = Course::with('section')
+            ->where('id', $courseId)
+            ->where('school_id', auth()->user()->school_id)
+            ->firstOrFail();
+
+        if (auth()->user()->hasRole('teacher') && (int) $course->teacher_id !== (int) auth()->id()) {
+            abort(403);
+        }
+
         $quarter = Quarter::with('schoolYear')->findOrFail($quarterId);
+        if ((int) $quarter->schoolYear->school_id !== (int) auth()->user()->school_id) {
+            abort(403);
+        }
         $components = GradingComponentType::orderBy('id')->get();
 
         $students = User::where('section_id', $course->section_id)
