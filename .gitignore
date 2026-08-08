@@ -16,3 +16,4 @@ yarn-error.log
 .env.dusk.local
 .vercel
 .env*
+.phpunit.result.cache
