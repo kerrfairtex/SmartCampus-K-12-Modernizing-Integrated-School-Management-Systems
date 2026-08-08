@@ -1,7 +1,7 @@
--at package.json
- {
-  "private": true,
-  "scripts": {
+at package.json
+  {
+    "private": true,
+    "scripts": {
     "dev": "mix",
     "development": "mix",
     "watch": "mix watch",
