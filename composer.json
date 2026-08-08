@@ -5,7 +5,7 @@
     "license": "GPL 3",
     "type": "project",
     "require": {
-        "php": "^7.4",
+        "php": "^7.4 || ^8.0",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
         "jdavidbakr/laravel-cache-garbage-collector": "^1.0",
@@ -14,7 +14,7 @@
         "laravel/framework": "^8.0",
         "laravel/passport": "^10",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0",
+        "laravel/ui": "^3.0",
         "maatwebsite/excel": "^3.1",
         "mavinoo/laravel-batch": "2.0",
         "renatomarinho/laravel-page-speed": "^2.0"
@@ -84,7 +84,7 @@
             "php-http/*": true
         },
         "platform": {
-            "php": "7.4.0"
+            "php": "8.1.0"
         }
     }
 }
