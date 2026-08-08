@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["php81", "php81Packages.composer", "php81Extensions.pdo_pgsql", "php81Extensions.gd", "nodejs_20"]
+nixPkgs = ["php81", "php81Packages.composer", "php81Extensions.pdo_pgsql", "php81Extensions.gd", "nodejs_22"]
 
 [phases.install]
 cmds = ["composer install --no-dev --optimize-autoloader", "npm ci"]
