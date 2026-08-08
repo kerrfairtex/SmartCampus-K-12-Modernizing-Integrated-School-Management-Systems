@@ -19,10 +19,10 @@ class DepEdGradingServiceTest extends TestCase
     /** @var DepEdGradingService */
     protected $service;
 
-    public function setUp()
-    {
+    public function setUp(): void {
+    
         parent::setUp();
-        $this->seed(\DepedGradingTableSeeder::class);
+        $this->seed(\Database\Seeders\DepedGradingTableSeeder::class);
         $this->service = new DepEdGradingService();
     }
 
@@ -42,8 +42,8 @@ class DepEdGradingServiceTest extends TestCase
 
         $initial = $this->service->computeInitialGrade($percentages, $weights);
 
-        // (90*40 + 85*40 + 88*20) / 100 = 88.6
-        $this->assertSame(88.6, $initial);
+        // (90*40 + 85*40 + 88*20) / (40+40+20) = 8760 / 100 = 87.6
+        $this->assertSame(87.6, $initial);
     }
 
     /** @test */
@@ -87,8 +87,8 @@ class DepEdGradingServiceTest extends TestCase
         $this->assertSame(90.0, $result['written_work_percent']);
         $this->assertSame(85.0, $result['performance_task_percent']);
         $this->assertSame(88.0, $result['quarterly_assessment_percent']);
-        $this->assertSame(88.6, $result['initial_grade']);
-        $this->assertSame(88.6, $result['transmuted_grade']);
+        $this->assertSame(87.6, $result['initial_grade']);
+        $this->assertSame(87.0, $result['transmuted_grade']);
         $this->assertSame('VS', $result['descriptor']);
     }
 
@@ -175,7 +175,7 @@ class DepEdGradingServiceTest extends TestCase
         );
 
         $this->assertInstanceOf(QuarterlyGrade::class, $grade);
-        $this->assertSame(88.6, (float) $grade->initial_grade);
+        $this->assertSame(87.6, (float) $grade->initial_grade);
         $this->assertSame('VS', $grade->descriptor);
         $this->assertNotNull($grade->computed_at);
     }

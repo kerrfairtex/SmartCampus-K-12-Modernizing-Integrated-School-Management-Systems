@@ -56,7 +56,7 @@ class LoginController extends Controller
     public function credentials(Request $request)
     {
         $credentials = $request->only($this->username(), 'password');
-        $credentials = array_add($credentials, 'active', '1');
+        $credentials['active'] = '1';
         return $credentials;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+$isServerless = filter_var(env('APP_SERVERLESS', false), FILTER_VALIDATE_BOOLEAN);
+
 return [
 
     /*
@@ -16,7 +18,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    'driver' => env('SESSION_DRIVER', $isServerless ? 'redis' : 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -124,7 +126,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        str_slug(env('APP_NAME', 'laravel'), '_').'_session'
+        \Illuminate\Support\Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
     /*

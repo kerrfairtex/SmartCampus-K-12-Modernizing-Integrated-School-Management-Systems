@@ -1,0 +1,56 @@
+service: smartcampus-k12
+
+provider:
+  name: aws
+  region: ${opt:region, 'ap-southeast-1'}
+  stage: ${opt:stage, 'dev'}
+  environment:
+    APP_ENV: ${self:provider.stage}
+    APP_SERVERLESS: 'true'
+    APP_DEBUG: 'false'
+    APP_URL: ${env:APP_URL}
+    DB_CONNECTION: ${env:DB_CONNECTION, 'mysql'}
+    DB_HOST: ${env:DB_HOST}
+    DB_PORT: ${env:DB_PORT, '3306'}
+    DB_DATABASE: ${env:DB_DATABASE}
+    DB_USERNAME: ${env:DB_USERNAME}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    CACHE_DRIVER: ${env:CACHE_DRIVER, 'redis'}
+    SESSION_DRIVER: ${env:SESSION_DRIVER, 'redis'}
+    # Laravel 5.5 expects QUEUE_DRIVER (Laravel 5.7+ renamed this to QUEUE_CONNECTION).
+    QUEUE_DRIVER: ${env:QUEUE_DRIVER, 'redis'}
+    FILESYSTEM_DRIVER: ${env:FILESYSTEM_DRIVER, 's3'}
+    UPLOADS_DISK: ${env:UPLOADS_DISK, 's3'}
+    REDIS_HOST: ${env:REDIS_HOST}
+    REDIS_PORT: ${env:REDIS_PORT, '6379'}
+    REDIS_PASSWORD: ${env:REDIS_PASSWORD, ''}
+    # Do not inject AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY; use Lambda execution role permissions instead.
+    AWS_DEFAULT_REGION: ${env:AWS_DEFAULT_REGION}
+    AWS_BUCKET: ${env:AWS_BUCKET}
+
+plugins:
+  - ./vendor/bref/bref
+
+functions:
+  web:
+    handler: public/index.php
+    runtime: php-82-fpm
+    timeout: 28
+    events:
+      - httpApi: '*'
+
+  artisan:
+    handler: artisan
+    runtime: php-82-console
+    timeout: 120
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!tests/**'
+    - '!.git/**'
+    - '!storage/**'
+    - 'storage/framework/**'
+    - '!bootstrap/cache/**'
+    - '!resources/assets/**'
+    - '!public/hot'
