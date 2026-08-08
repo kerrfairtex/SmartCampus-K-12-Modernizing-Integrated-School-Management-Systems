@@ -54,10 +54,10 @@ FILESYSTEM_DRIVER=supabase
 FILESYSTEM_CLOUD=supabase
 SUPABASE_REGION=ap-northeast-1
 SUPABASE_STORAGE_BUCKET=school-files
-SUPABASE_STORAGE_ENDPOINT=https://ebyepweqwihdvjecrufk.supabase.co/storage/v1
+SUPABASE_STORAGE_ENDPOINT=https://******.supabase.co/storage/v1
 SUPABASE_STORAGE_ACCESS_KEY=     # use a Supabase JWT or service-role key
 SUPABASE_STORAGE_SECRET_KEY=     # ROTATED; do not reuse the DB password
-SUPABASE_URL=https://ebyepweqwihdvjecrufk.supabase.co
+SUPABASE_URL=https://**********.supabase.co
 ```
 
 ## After deploy
