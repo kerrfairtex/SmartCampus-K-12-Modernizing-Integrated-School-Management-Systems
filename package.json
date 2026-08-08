@@ -24,10 +24,10 @@
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "blueimp-file-upload": "^10.32.0",
-    "bootstrap": "^3.4.1",
+    "bootstrap": "^5.0.0",
     "bootswatch": "^3.4.1",
     "pg": "^8.22.0",
     "prisma": "^7.9.1",
-    "webpack": "5.93.0"
+    "webpack": "5.109.2"
   }
 }
