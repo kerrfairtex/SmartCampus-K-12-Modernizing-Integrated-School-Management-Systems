@@ -1,0 +1,56 @@
+[1mdiff --git a/package.json b/package.json[m
+[1mindex 7aca89f..243e2b6 100644[m
+[1m--- a/package.json[m
+[1m+++ b/package.json[m
+[36m@@ -1,16 +1,15 @@[m
+ {[m
+   "private": true,[m
+   "scripts": {[m
+[31m-    "dev": "npm run development",[m
+[31m-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",[m
+[31m-    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",[m
+[31m-    "watch-poll": "npm run watch -- --watch-poll",[m
+[31m-    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",[m
+[31m-    "prod": "npm run production",[m
+[31m-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"[m
+[32m+[m[32m    "dev": "mix",[m
+[32m+[m[32m    "development": "mix",[m
+[32m+[m[32m    "watch": "mix watch",[m
+[32m+[m[32m    "watch-poll": "mix watch -- --watch-options-poll",[m
+[32m+[m[32m    "hot": "mix watch --hot",[m
+[32m+[m[32m    "prod": "mix --production",[m
+[32m+[m[32m    "production": "mix --production"[m
+   },[m
+   "devDependencies": {[m
+[31m-<<<<<<< HEAD[m
+     "axios": "^1.7.0",[m
+     "bootstrap-sass": "^3.4.1",[m
+     "cross-env": "^7.0.3",[m
+[36m@@ -21,22 +20,14 @@[m
+     "sass-loader": "^12.0.0",[m
+     "vue": "^3.5.0"[m
+   },[m
+[31m-=======[m
+[31m-  "axios": "^1.19",[m
+[31m-  "bootstrap-sass": "^3.3.7",[m
+[31m-  "cross-env": "^5.1",[m
+[31m-  "jquery": "^3.2",[m
+[31m-  "laravel-mix": "^1.0",[m
+[31m-  "lodash": "^4.17.4",[m
+[31m-  "sass": "^1.32.13",[m
+[31m-  "sass-loader": "^7.3.1",[m
+[31m-  "vue": "^2.5.7"[m
+[31m-},[m
+[31m->>>>>>> 010d42408f3f96efd9c9405b9d811cfb0f0c846e[m
+   "dependencies": {[m
+[32m+[m[32m    "@prisma/adapter-pg": "^7.9.1",[m
+[32m+[m[32m    "@prisma/client": "^7.9.1",[m
+     "blueimp-file-upload": "^10.32.0",[m
+     "bootstrap": "^3.4.1",[m
+     "bootswatch": "^3.4.1",[m
+[31m-    "webpack": "^5.109.2"[m
+[32m+[m[32m    "pg": "^8.22.0",[m
+[32m+[m[32m    "prisma": "^7.9.1",[m
+[32m+[m[32m    "webpack": "5.93.0"[m
+   }[m
+ }[m
