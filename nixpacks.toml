@@ -1,4 +1,5 @@
 [phases.setup]
+nixpkgsArchive = "51ad838b03a05b1de6f9f2a0fffecee64a9788ee"
 nixPkgs = ["php81", "php81Packages.composer", "php81Extensions.pdo_pgsql", "php81Extensions.gd", "nodejs_22"]
 
 [phases.install]
