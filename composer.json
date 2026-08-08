@@ -9,25 +9,24 @@
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
         "jdavidbakr/laravel-cache-garbage-collector": "^1.0",
-        "lab404/laravel-impersonate": "1.2",
-        "laravel/cashier": "~7.0",
-        "laravel/framework": "^5.8",
-        "laravel/passport": "^4.0",
+        "lab404/laravel-impersonate": "^1.3",
+        "laravel/cashier": "^9",
+        "laravel/framework": "^6.0",
+        "laravel/passport": "^7",
         "laravel/tinker": "~1.0",
+        "laravel/ui": "^1.0",
         "maatwebsite/excel": "^3.1",
-        "maddhatter/laravel-fullcalendar": "^1.3",
         "mavinoo/laravel-batch": "2.0",
         "renatomarinho/laravel-page-speed": "^1.8"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.2",
+        "barryvdh/laravel-debugbar": "^3.3",
         "filp/whoops": "~2.0",
-        "friendsofphp/php-cs-fixer": "^2.14",
+        "friendsofphp/php-cs-fixer": "^2.16",
         "fzaninotto/faker": "~1.4",
-        "laravel/dusk": "^4.0",
+        "laravel/dusk": "^5.0",
         "mockery/mockery": "~1.0",
-        "phpunit/phpunit": "~6.0",
-        "rap2hpoutre/laravel-log-viewer": "^0.22.1"
+        "phpunit/phpunit": "^7"
     },
     "autoload": {
         "classmap": [
@@ -50,8 +49,7 @@
         "laravel": {
             "dont-discover": [
                 "laravel/dusk",
-                "barryvdh/laravel-debugbar",
-                "rap2hpoutre/laravel-log-viewer"
+                "barryvdh/laravel-debugbar"
             ]
         }
     },
@@ -83,6 +81,9 @@
             "composer/*": true,
             "kylekatarnls/update-helper": true,
             "php-http/*": true
+        },
+        "platform": {
+            "php": "7.4.0"
         }
     }
 }

@@ -29,7 +29,8 @@ Route::middleware(['auth', 'master'])->group(function () {
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware(['auth'])->group(function (){
-  Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+  // NOTE: web log viewer (rap2hpoutre/laravel-log-viewer) dropped at L6
+  // (no L6-compatible release). Use `php artisan tail` for logs instead.
   // Route::get('/view-attendance/section/{section_id}',function($section_id){
   //   if($section_id > 0){
   //     $attendances = App\Attendance::with(['student'])->where('section_id', $section_id)->get();
