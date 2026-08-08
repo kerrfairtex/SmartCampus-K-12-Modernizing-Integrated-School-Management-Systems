@@ -1,11 +1,11 @@
 [phases.setup]
-nixPkgs = ["php81", "php81Packages.composer", "php81Packages.gd", "php81Packages.mbstring", "php81Packages.bcmath", "php81Packages.xml", "php81Packages.zip"]
+nixPkgs = ["php81", "php81Packages.composer", "php81Extensions.pdo_pgsql", "php81Extensions.gd", "nodejs_22"]
 
 [phases.install]
-cmds = ["composer install --no-dev --optimize-autoloader"]
+cmds = ["composer install --no-dev --optimize-autoloader", "npm ci"]
 
 [phases.build]
-cmds = ["php artisan config:cache", "php artisan route:cache", "php artisan view:cache"]
+cmds = ["npx prisma generate", "npm run production", "php artisan route:cache", "php artisan view:cache"]
 
 [start]
-cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
+cmd = "php artisan migrate --force && php artisan config:cache && php artisan serve --host=0.0.0.0 --port=$PORT"

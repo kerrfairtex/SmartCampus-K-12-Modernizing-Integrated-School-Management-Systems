@@ -166,6 +166,7 @@ Set the following environment variables in Railway:
 | [Literature Review](docs/LITERATURE_REVIEW.md) | Comparison of open-source and Philippine commercial systems |
 | [Gap Analysis](docs/GAP_ANALYSIS.md) | Technical gaps between base repo and SmartCampus requirements |
 | [DepEd Grading (Phase 2)](docs/DEPED_GRADING.md) | Quarterly grading schema and computation service |
+| [Serverless Deployment Baseline](docs/SERVERLESS_DEPLOYMENT.md) | AWS-focused serverless migration baseline and env model |
 | [Original readme](readme.md) | Unifiedtransform base project documentation |
 
 ---

@@ -31,8 +31,22 @@ class UploadController extends Controller {
     ]);
 
     $upload_dir = 'school-'.auth()->user()->school_id.'/'.date("Y").'/'.$request->upload_type;
+    $uploadDisk = config('serverless.uploads_disk', 'public');
+    // The "local" disk does not provide a public URL, so uploads are forced to the web-accessible local public disk.
+    $resolvedUploadDisk = ($uploadDisk === 'local') ? 'public' : $uploadDisk;
+    $path = \Storage::disk($resolvedUploadDisk)->putFile($upload_dir, $request->file('file'));
 
-    $path = \Storage::disk('public')->putFile($upload_dir, $request->file('file'));//$request->file('file')->store($upload_dir);
+    if (!$path) {
+      return response()->json([
+          'imgUrlpath' => null,
+          'path' => null,
+          'storage_key' => null,
+          'error' => true
+      ]);
+    }
+
+    $filePath = ($path) ? \Storage::disk($resolvedUploadDisk)->url($path) : null;
+    $storedFilePath = ($path && $resolvedUploadDisk === 'public') ? 'storage/'.$path : $filePath;
     
     if($request->upload_type == 'notice'){
       $request->validate([
@@ -40,7 +54,7 @@ class UploadController extends Controller {
       ]);
       
       $tb = new \App\Notice;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $storedFilePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -51,7 +65,7 @@ class UploadController extends Controller {
         'title' => 'required|string',
       ]);
       $tb = new \App\Event;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $storedFilePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -62,7 +76,7 @@ class UploadController extends Controller {
         'title' => 'required|string',
       ]);
       $tb = new \App\Routine;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $storedFilePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -73,7 +87,7 @@ class UploadController extends Controller {
         'title' => 'required|string',
       ]);
       $tb = new \App\Syllabus;
-      $tb->file_path = 'storage/'.$path;
+      $tb->file_path = $storedFilePath;
       $tb->title = $request->title;
       $tb->active = 1;
       $tb->school_id = auth()->user()->school_id;
@@ -81,18 +95,15 @@ class UploadController extends Controller {
       $tb->save();
     } else if($request->upload_type == 'profile' && $request->user_id > 0){
       $tb = \App\User::find($request->user_id);
-      $tb->pic_path = 'storage/'.$path;
+      $tb->pic_path = $storedFilePath;
       $tb->save();
     }
 
-    return ($path)?response()->json([
-        'imgUrlpath' => url('storage/'.$path),
-        'path' => 'storage/'.$path,
+    return response()->json([
+        'imgUrlpath' => $filePath,
+        'path' => $storedFilePath,
+        'storage_key' => $path,
         'error' => false
-    ]):response()->json([
-        'imgUrlpath' => null,
-        'path' => null,
-        'error' => true
     ]);
     // $options = ['upload_dir'=>'','upload_url'=>''];
     // new UploadHandler($options);
