@@ -3,7 +3,709 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+}
+
+// ──────────────────────────────────────────────
+// SmartCampus K-12 models
+// All table names match the Laravel migrations.
+// This Supabase project is shared with other
+// repos; models here map only the tables owned
+// by this application.
+// ──────────────────────────────────────────────
+
+model School {
+  id          Int      @id @default(autoincrement())
+  name        String
+  established String   @default("")
+  about       String
+  medium      String
+  code        Int      @unique
+  theme       String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  users                   User[]
+  exams                   Exam[]
+  classes                 Class[]
+  syllabuses              Syllabus[]
+  notices                 Notice[]
+  events                  Event[]
+  routines                Routine[]
+  books                   Book[]
+  courses                 Course[]
+  forms                   Form[]
+  messages                Message[]
+  fees                    Fee[]
+  grade_systems           GradeSystem[]
+  accounts                Account[]
+  account_sectors         AccountSector[]
+  departments             Department[]
+  deped_transmutation_tables DepedTransmutationTable[]
+  school_years            SchoolYear[]
+
+  @@map("schools")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String   @unique
+  password       String
+  role           String
+  active         Int
+  school_id      Int?
+  code           Int?
+  student_code   Int?     @unique
+  gender         String   @default("")
+  blood_group    String   @default("")
+  nationality    String   @default("")
+  phone_number   String   @unique @default("")
+  address        String   @default("")
+  about          String   @default("")
+  pic_path       String   @default("")
+  verified       Int
+  section_id     Int?
+  remember_token String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  school         School?  @relation(fields: [school_id], references: [id])
+
+  @@map("users")
+}
+
+model PasswordReset {
+  email      String   @id
+  token      String
+  created_at DateTime?
+
+  @@map("password_resets")
+}
+
+model Exam {
+  id               Int      @id @default(autoincrement())
+  exam_name        String
+  active           Int
+  notice_published Int
+  result_published Int
+  school_id        Int
+  user_id          Int
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  school           School   @relation(fields: [school_id], references: [id])
+  exam_for_classes ExamForClass[]
+  attendances      Attendance[]
+  grades           Grade[]
+  courses          Course[]
+
+  @@map("exams")
+}
+
+model Attendance {
+  id         Int      @id @default(autoincrement())
+  student_id Int
+  section_id Int
+  exam_id    Int
+  present    Int
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  exam       Exam     @relation(fields: [exam_id], references: [id])
+
+  @@map("attendances")
+}
+
+model Class {
+  id           Int      @id @default(autoincrement())
+  class_number String
+  school_id    Int
+  group        String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  school       School   @relation(fields: [school_id], references: [id])
+  sections     Section[]
+  books        Book[]
+  courses      Course[]
+  exam_for_classes ExamForClass[]
+
+  @@map("classes")
+}
+
+model Section {
+  id             Int      @id @default(autoincrement())
+  section_number String
+  room_number    Int
+  class_id       Int
+  user_id        Int      @default(0)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  class          Class    @relation(fields: [class_id], references: [id])
+  homeworks      Homework[]
+  courses        Course[]
+
+  @@map("sections")
+}
+
+model Syllabus {
+  id          Int      @id @default(autoincrement())
+  file_path   String
+  title       String
+  description String
+  active      Int
+  school_id   Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  school      School   @relation(fields: [school_id], references: [id])
+
+  @@map("syllabuses")
+}
+
+model Notice {
+  id          Int      @id @default(autoincrement())
+  file_path   String
+  title       String
+  description String
+  active      Int
+  school_id   Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  school      School   @relation(fields: [school_id], references: [id])
+
+  @@map("notices")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  file_path   String
+  title       String
+  description String
+  active      Int
+  school_id   Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  school      School   @relation(fields: [school_id], references: [id])
+
+  @@map("events")
+}
+
+model Homework {
+  id          Int      @id @default(autoincrement())
+  file_path   String
+  description String
+  teacher_id  Int
+  section_id  Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  section     Section  @relation(fields: [section_id], references: [id])
+
+  @@map("homeworks")
+}
+
+model Routine {
+  id          Int      @id @default(autoincrement())
+  file_path   String
+  title       String
+  description String
+  active      Int
+  school_id   Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  school      School   @relation(fields: [school_id], references: [id])
+
+  @@map("routines")
+}
+
+model Grade {
+  id           Int      @id @default(autoincrement())
+  marks        Float
+  gpa          Float
+  attendance   Float
+  quiz1        Float
+  quiz2        Float
+  quiz3        Float
+  quiz4        Float
+  quiz5        Float
+  ct1          Float
+  ct2          Float
+  ct3          Float
+  ct4          Float
+  ct5          Float
+  assignment1  Float
+  assignment2  Float
+  assignment3  Float
+  written      Float
+  mcq          Float
+  practical    Float
+  exam_id      Int
+  student_id   Int
+  teacher_id   Int
+  course_id    Int
+  user_id      Int
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  exam         Exam     @relation(fields: [exam_id], references: [id])
+
+  @@map("grades")
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  sent_status Int
+  active      Int
+  message     String
+  student_id  Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+model Feedback {
+  id          Int      @id @default(autoincrement())
+  description String
+  teacher_id  Int
+  student_id  Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("feedbacks")
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  book_code String   @unique @db.VarChar(50)
+  title     String   @db.VarChar(250)
+  author    String   @db.VarChar(100)
+  quantity  Int
+  rackNo    String   @db.VarChar(10)
+  rowNo     String   @db.VarChar(10)
+  img_path  String
+  about     String
+  type      String   @db.VarChar(10)
+  price     Int
+  class_id  Int
+  school_id Int
+  user_id   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  class     Class    @relation(fields: [class_id], references: [id])
+  school    School   @relation(fields: [school_id], references: [id])
+  issued_books IssuedBook[]
+
+  @@map("books")
+}
+
+model Course {
+  id                   Int      @id @default(autoincrement())
+  course_name          String
+  class_id             Int
+  course_type          String
+  course_time          String
+  grade_system_name    String
+  quiz_count           Int
+  assignment_count     Int
+  ct_count             Int
+  quiz_percent         Int
+  attendance_percent   Int
+  assignment_percent   Int
+  ct_percent           Int
+  final_exam_percent   Int
+  practical_percent    Int
+  att_fullmark         Int
+  quiz_fullmark        Int
+  a_fullmark           Int
+  ct_fullmark          Int
+  final_fullmark       Int
+  practical_fullmark   Int
+  school_id            Int
+  exam_id              Int
+  teacher_id           Int
+  section_id           Int
+  user_id              Int
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  class                Class    @relation(fields: [class_id], references: [id])
+  school               School   @relation(fields: [school_id], references: [id])
+  exam                 Exam     @relation(fields: [exam_id], references: [id])
+  section              Section  @relation(fields: [section_id], references: [id])
+  course_grading_weights CourseGradingWeight[]
+  quarterly_component_scores QuarterlyComponentScore[]
+  quarterly_grades     QuarterlyGrade[]
+
+  @@map("courses")
+}
+
+model Form {
+  id        Int      @id @default(autoincrement())
+  name      String
+  file_path String
+  school_id Int
+  user_id   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  school    School   @relation(fields: [school_id], references: [id])
+
+  @@map("forms")
+}
+
+model Message {
+  id           Int      @id @default(autoincrement())
+  phone_number String
+  email        String   @unique
+  message      String
+  school_id    Int
+  user_id      Int
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  school       School   @relation(fields: [school_id], references: [id])
+
+  @@map("messages")
+}
+
+model Faq {
+  id         Int      @id @default(autoincrement())
+  question   String
+  answer     String
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+model Fee {
+  id               Int      @id @default(autoincrement())
+  fee_name         String
+  school_id        Int
+  fine_fee         String
+  exam_fee         String
+  registration_fee String
+  library_fee      String
+  lab_fee          String
+  sport_fee        String
+  late_payment_fee String
+  maintenance_fee  String
+  internet_fee     String
+  farewell_fee     String
+  other_fee        String
+  user_id          Int
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  school           School   @relation(fields: [school_id], references: [id])
+
+  @@map("fees")
+}
+
+model GradeSystem {
+  id                Int      @id @default(autoincrement())
+  grade_system_name String
+  grade             String
+  point             Float
+  from_mark         Int
+  to_mark           Int
+  school_id         Int
+  user_id           Int
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  school            School   @relation(fields: [school_id], references: [id])
+
+  @@map("grade_systems")
+}
+
+model IssuedBook {
+  id          Int      @id @default(autoincrement())
+  student_code Int
+  book_id     Int
+  quantity    Int
+  school_id   Int
+  issue_date  DateTime @db.Date
+  return_date DateTime @db.Date
+  fine        Decimal
+  borrowed    Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  book        Book     @relation(fields: [book_id], references: [id])
+
+  @@map("issued_books")
+}
+
+model Account {
+  id          Int      @id @default(autoincrement())
+  name        String
+  type        String
+  amount      Int
+  description String
+  school_id   Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  school      School   @relation(fields: [school_id], references: [id])
+
+  @@map("accounts")
+}
+
+model AccountSector {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String
+  school_id Int
+  user_id   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  school    School   @relation(fields: [school_id], references: [id])
+
+  @@map("account_sectors")
+}
+
+model StudentInfo {
+  id                    Int      @id @default(autoincrement())
+  student_id            Int
+  session               String
+  version               String
+  group                 String
+  birthday              DateTime
+  religion              String
+  father_name           String
+  father_phone_number   String
+  father_national_id    String
+  father_occupation     String
+  father_designation    String
+  father_annual_income  Int
+  mother_name           String
+  mother_phone_number   String
+  mother_national_id    String
+  mother_occupation     String
+  mother_designation    String
+  mother_annual_income  Int
+  user_id               Int?
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+
+  @@map("student_infos")
+}
+
+model StudentBoardExam {
+  id               Int      @id @default(autoincrement())
+  student_id       Int
+  exam_name        String
+  group            String
+  roll             Int
+  registration     Int
+  session          String
+  board            String
+  passing_year     Int
+  institution_name String
+  gpa              Float
+  user_id          Int
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  @@map("student_board_exams")
+}
+
+model ExamForClass {
+  id       Int @id @default(autoincrement())
+  class_id Int
+  exam_id  Int
+  active   Int @default(0)
+
+  class    Class @relation(fields: [class_id], references: [id])
+  exam     Exam  @relation(fields: [exam_id], references: [id])
+
+  @@map("exam_for_classes")
+}
+
+model Department {
+  id              Int      @id @default(autoincrement())
+  school_id       Int
+  department_name String   @db.VarChar(50)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  school          School   @relation(fields: [school_id], references: [id])
+
+  @@map("departments")
+}
+
+model Payment {
+  id             Int      @id @default(autoincrement())
+  payment_id     String
+  payment_status Int
+  amount         Float
+  custormer_id   Int
+  charge_for     String
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@map("payments")
+}
+
+// ── DepEd Grading Tables (2026_08_04 migration) ──
+
+model SchoolYear {
+  id         Int      @id @default(autoincrement())
+  school_id  Int
+  name       String
+  start_date DateTime @db.Date
+  end_date   DateTime @db.Date
+  is_active  Boolean  @default(false)
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  school     School   @relation(fields: [school_id], references: [id])
+  quarters   Quarter[]
+
+  @@unique([school_id, name])
+  @@map("school_years")
+}
+
+model Quarter {
+  id             Int      @id @default(autoincrement())
+  school_year_id Int
+  quarter_number Int
+  name           String
+  start_date     DateTime? @db.Date
+  end_date       DateTime? @db.Date
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  school_year    SchoolYear @relation(fields: [school_year_id], references: [id])
+  quarterly_component_scores QuarterlyComponentScore[]
+  quarterly_grades           QuarterlyGrade[]
+
+  @@unique([school_year_id, quarter_number])
+  @@map("quarters")
+}
+
+model GradingComponentType {
+  id                     Int      @id @default(autoincrement())
+  code                   String   @unique @db.VarChar(10)
+  name                   String
+  description            String?
+  default_weight_percent Int
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+
+  course_grading_weights CourseGradingWeight[]
+  quarterly_component_scores QuarterlyComponentScore[]
+
+  @@map("grading_component_types")
+}
+
+model CourseGradingWeight {
+  id                        Int      @id @default(autoincrement())
+  course_id                 Int
+  grading_component_type_id Int
+  weight_percent            Int
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
+
+  course                    Course               @relation(fields: [course_id], references: [id])
+  grading_component_type    GradingComponentType @relation(fields: [grading_component_type_id], references: [id])
+
+  @@unique([course_id, grading_component_type_id], name: "course_component_weight_unique")
+  @@map("course_grading_weights")
+}
+
+model DepedTransmutationTable {
+  id          Int      @id @default(autoincrement())
+  school_id   Int?
+  name        String
+  description String?
+  is_default  Boolean  @default(false)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  school      School?  @relation(fields: [school_id], references: [id])
+  rows        DepedTransmutationRow[]
+
+  @@map("deped_transmutation_tables")
+}
+
+model DepedTransmutationRow {
+  id                          Int      @id @default(autoincrement())
+  deped_transmutation_table_id Int
+  from_score                  Decimal  @db.Decimal(5, 2)
+  to_score                    Decimal  @db.Decimal(5, 2)
+  transmuted_grade            Decimal  @db.Decimal(5, 2)
+  created_at                  DateTime @default(now())
+  updated_at                  DateTime @updatedAt
+
+  table                       DepedTransmutationTable @relation(fields: [deped_transmutation_table_id], references: [id])
+
+  @@map("deped_transmutation_rows")
+}
+
+model QuarterlyComponentScore {
+  id                        Int      @id @default(autoincrement())
+  quarter_id                Int
+  course_id                 Int
+  student_id                Int
+  grading_component_type_id Int
+  raw_score                 Decimal  @db.Decimal(8, 2)
+  max_score                 Decimal  @default(100) @db.Decimal(8, 2)
+  teacher_id                Int?
+  user_id                   Int
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
+
+  quarter                   Quarter              @relation(fields: [quarter_id], references: [id])
+  course                    Course               @relation(fields: [course_id], references: [id])
+  grading_component_type    GradingComponentType @relation(fields: [grading_component_type_id], references: [id])
+
+  @@unique([quarter_id, course_id, student_id, grading_component_type_id], name: "quarterly_component_unique")
+  @@map("quarterly_component_scores")
+}
+
+model QuarterlyGrade {
+  id                          Int      @id @default(autoincrement())
+  quarter_id                  Int
+  course_id                   Int
+  student_id                  Int
+  written_work_percent        Decimal? @db.Decimal(5, 2)
+  performance_task_percent    Decimal? @db.Decimal(5, 2)
+  quarterly_assessment_percent Decimal? @db.Decimal(5, 2)
+  initial_grade               Decimal  @db.Decimal(5, 2)
+  transmuted_grade            Decimal  @db.Decimal(5, 2)
+  descriptor                  String?  @db.VarChar(5)
+  remarks                     String?
+  teacher_id                  Int?
+  user_id                     Int
+  computed_at                 DateTime?
+  created_at                  DateTime @default(now())
+  updated_at                  DateTime @updatedAt
+
+  quarter                     Quarter @relation(fields: [quarter_id], references: [id])
+  course                      Course  @relation(fields: [course_id], references: [id])
+
+  @@unique([quarter_id, course_id, student_id], name: "quarterly_grade_unique")
+  @@map("quarterly_grades")
 }
