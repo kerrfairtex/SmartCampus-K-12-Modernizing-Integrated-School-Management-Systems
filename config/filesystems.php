@@ -63,6 +63,18 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        // Supabase Storage is S3-compatible: point Laravel's s3 driver at it
+        // so uploaded files survive Railway's ephemeral filesystem.
+        'supabase' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_STORAGE_ACCESS_KEY'),
+            'secret' => env('SUPABASE_STORAGE_SECRET_KEY'),
+            'region' => env('SUPABASE_REGION', 'ap-northeast-1'),
+            'bucket' => env('SUPABASE_STORAGE_BUCKET', 'school-files'),
+            'endpoint' => env('SUPABASE_STORAGE_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+        ],
+
     ],
 
 ];

@@ -5,13 +5,13 @@
     "license": "GPL 3",
     "type": "project",
     "require": {
-        "php": ">=7.0.0",
+        "php": "^7.4",
         "doctrine/dbal": "^2.9",
-        "fideloper/proxy": "~3.3",
+        "fideloper/proxy": "^4.0",
         "jdavidbakr/laravel-cache-garbage-collector": "^1.0",
         "lab404/laravel-impersonate": "1.2",
         "laravel/cashier": "~7.0",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "^5.8",
         "laravel/passport": "^4.0",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "^3.1",
@@ -24,7 +24,7 @@
         "filp/whoops": "~2.0",
         "friendsofphp/php-cs-fixer": "^2.14",
         "fzaninotto/faker": "~1.4",
-        "laravel/dusk": "^2.0",
+        "laravel/dusk": "^4.0",
         "mockery/mockery": "~1.0",
         "phpunit/phpunit": "~6.0",
         "rap2hpoutre/laravel-log-viewer": "^0.22.1"
@@ -73,6 +73,16 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "policy": {
+            "advisories": {
+                "block": false
+            }
+        },
+        "allow-plugins": {
+            "composer/*": true,
+            "kylekatarnls/update-helper": true,
+            "php-http/*": true
+        }
     }
 }
