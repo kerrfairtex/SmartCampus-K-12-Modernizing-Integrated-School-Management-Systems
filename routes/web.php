@@ -19,7 +19,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Laravel 7+ (laravel/ui ^2) registers auth routes via Route::auth()
+// (Auth::routes() from the old laravel/ui ^1 / framework is gone).
+Route::auth();
 
 Route::middleware(['auth', 'master'])->group(function () {
     Route::get('/masters', 'MasterController@index')->name('masters.index');
