@@ -30,8 +30,6 @@
         border: 1px solid rgba(11,61,92,0.08);
         box-shadow: 0 4px 24px rgba(11,61,92,0.06);
     }
-    .login-eyebrow {
-        font-family: 'IBM Plex Mono', monospace;
         font-size: 0.7rem;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -98,8 +96,6 @@
 
 <div class="login-wrap">
     <div class="login-card">
-        <div class="login-eyebrow">SmartCampus &middot; Batu-Batu NIHS</div>
-        <h1>Log in</h1>
 
         @if ($errors->any())
             <div class="alert-danger">
