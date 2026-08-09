@@ -13,6 +13,6 @@ class FeesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Fee::class, 50)->create();
+        factory(\App\Fee::class, 50)->create();
     }
 }

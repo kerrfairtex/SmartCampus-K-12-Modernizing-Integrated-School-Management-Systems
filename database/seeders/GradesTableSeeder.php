@@ -13,6 +13,6 @@ class GradesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Grade::class, 50)->create();
+        factory(\App\Grade::class, 50)->create();
     }
 }

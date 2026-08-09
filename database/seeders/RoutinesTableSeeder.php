@@ -13,6 +13,6 @@ class RoutinesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Routine::class, 50)->create();
+        factory(\App\Routine::class, 50)->create();
     }
 }

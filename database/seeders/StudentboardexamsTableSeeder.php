@@ -13,6 +13,6 @@ class StudentboardexamsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\StudentBoardExam::class, 200)->create();
+        factory(\App\StudentBoardExam::class, 200)->create();
     }
 }
