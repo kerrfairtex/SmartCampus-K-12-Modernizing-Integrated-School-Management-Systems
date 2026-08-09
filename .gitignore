@@ -17,3 +17,5 @@ yarn-error.log
 .vercel
 .env*
 .phpunit.result.cache
+key.txt
+migrate.log
