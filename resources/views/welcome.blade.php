@@ -190,8 +190,7 @@
     <nav class="nav">
         <div class="brand">SmartCampus<small>Batu-Batu National Integrated High School</small></div>
         <div class="nav-links">
-            <a href="/login">Log in</a>
-            <a href="https://github.com/kerrfairtex/SmartCampus-K-12-Modernizing-Integrated-School-Management-Systems" class="cta">GitHub</a>
+            <a href="/login" class="cta">Log in</a>
         </div>
     </nav>
 
