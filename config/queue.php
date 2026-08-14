@@ -1,5 +1,7 @@
 <?php
 
+$isServerless = filter_var(env('APP_SERVERLESS', false), FILTER_VALIDATE_BOOLEAN);
+
 return [
 
     /*
@@ -15,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_DRIVER', 'sync'),
+    'default' => env('QUEUE_DRIVER', $isServerless ? 'redis' : 'sync'),
 
     /*
     |--------------------------------------------------------------------------

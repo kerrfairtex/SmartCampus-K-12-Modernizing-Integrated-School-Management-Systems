@@ -23,6 +23,7 @@ This repository use as its foundation:
 | [Literature Review](docs/LITERATURE_REVIEW.md) | Comparison of open-source and Philippine commercial systems |
 | [Gap Analysis](docs/GAP_ANALYSIS.md) | Technical gaps between base repo and SmartCampus requirements |
 | [DepEd Grading (Phase 2)](docs/DEPED_GRADING.md) | Quarterly grading schema and computation service |
+| [Serverless Deployment Baseline](docs/SERVERLESS_DEPLOYMENT.md) | AWS-focused serverless migration baseline and env model |
 | [readme.md](readme.md) | Original Unifiedtransform project documentation |
 
 ## Quick Start
