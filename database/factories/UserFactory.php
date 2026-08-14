@@ -59,25 +59,55 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->state(User::class, 'master', [
-    'role' => 'master'
+    'role' => 'master',
 ]);
 
-$factory->state(User::class, 'accountant', [
-    'role' => 'accountant'
-]);
+$factory->state(User::class, 'accountant', function (Faker $faker) {
+    static $i = 0; $i++;
+    return [
+        'role'     => 'accountant',
+        'name'     => "Accountant $i",
+        'email'    => "accountant{$i}@smartcampus.test",
+        'password' => bcrypt("accountant123"),
+    ];
+});
 
-$factory->state(User::class, 'admin', [
-    'role' => 'admin'
-]);
+$factory->state(User::class, 'admin', function (Faker $faker) {
+    static $i = 0; $i++;
+    return [
+        'role'     => 'admin',
+        'name'     => "Admin $i",
+        'email'    => "admin{$i}@smartcampus.test",
+        'password' => bcrypt("admin123"),
+    ];
+});
 
-$factory->state(User::class, 'librarian', [
-    'role' => 'librarian'
-]);
+$factory->state(User::class, 'librarian', function (Faker $faker) {
+    static $i = 0; $i++;
+    return [
+        'role'     => 'librarian',
+        'name'     => "Librarian $i",
+        'email'    => "librarian{$i}@smartcampus.test",
+        'password' => bcrypt("librarian123"),
+    ];
+});
 
-$factory->state(User::class, 'teacher', [
-    'role' => 'teacher'
-]);
+$factory->state(User::class, 'teacher', function (Faker $faker) {
+    static $i = 0; $i++;
+    return [
+        'role'     => 'teacher',
+        'name'     => "Teacher $i",
+        'email'    => "teacher{$i}@smartcampus.test",
+        'password' => bcrypt("teacher123"),
+    ];
+});
 
-$factory->state(User::class, 'student', [
-    'role' => 'student'
-]);
+$factory->state(User::class, 'student', function (Faker $faker) {
+    static $i = 0; $i++;
+    return [
+        'role'     => 'student',
+        'name'     => "Student $i",
+        'email'    => "student{$i}@smartcampus.test",
+        'password' => bcrypt("student123"),
+    ];
+});

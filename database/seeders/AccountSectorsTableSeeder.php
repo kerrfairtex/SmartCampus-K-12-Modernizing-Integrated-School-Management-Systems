@@ -13,6 +13,6 @@ class AccountSectorsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\AccountSector::class, 50)->create();
+        factory(\App\AccountSector::class, 50)->create();
     }
 }
