@@ -1,5 +1,7 @@
 <?php
 
+$isServerless = filter_var(env('APP_SERVERLESS', false), FILTER_VALIDATE_BOOLEAN);
+
 return [
 
     /*
@@ -15,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_DRIVER', 'file'),
+    'default' => env('CACHE_DRIVER', $isServerless ? 'redis' : 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -88,7 +90,7 @@ return [
 
     'prefix' => env(
         'CACHE_PREFIX',
-        str_slug(env('APP_NAME', 'laravel'), '_').'_cache'
+        \Illuminate\Support\Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'
     ),
 
 ];

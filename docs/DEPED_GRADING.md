@@ -43,6 +43,40 @@ Final grade = average of Q1–Q4 transmuted grades.
 | `createSchoolYearWithQuarters()` | Create year + Q1–Q4 |
 | `ensureDefaultWeightsForCourse()` | Seed 40/40/20 on course |
 
+## Framework-agnostic core
+
+Core grading math now lives in:
+
+- `App\Core\DepedGrading\DepEdGradingCalculator`
+- `App\Core\DepedGrading\Contracts\GradingConfiguration`
+
+Laravel integration is handled by:
+
+- `App\Services\DepedGrading\FrameworkGradingConfiguration`
+- `App\Services\DepedGrading\DepEdGradingService`
+
+This separation lets quarterly grade computation run without booting Laravel.
+
+### Standalone CLI (no Laravel bootstrap)
+
+```bash
+cat <<'JSON' > /tmp/deped-input.json
+{
+  "component_scores": {
+    "WW": {"raw": 36, "max": 40},
+    "PT": {"raw": 34, "max": 40},
+    "QA": {"raw": 44, "max": 50}
+  },
+  "weights": {"WW": 40, "PT": 40, "QA": 20},
+  "transmutation_rows": [
+    {"from_score": 88.51, "to_score": 88.99, "transmuted_grade": 89}
+  ]
+}
+JSON
+
+php php/deped_grading_standalone.php /tmp/deped-input.json
+```
+
 ## Configuration
 
 `config/deped_grading.php` — default weights, descriptor bands, component codes.
