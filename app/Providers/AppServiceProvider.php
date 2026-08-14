@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,8 +15,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (env('APP_ENV') === 'production') {
+            \URL::forceScheme('https');
+        }
+
         Schema::defaultStringLength(191);
-        Resource::withoutWrapping();
+        JsonResource::withoutWrapping();
     }
 
     /**
@@ -29,7 +33,6 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(\Laravel\Dusk\DuskServiceProvider::class);
             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
-            $this->app->register(\Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class);
         }
     }
 }

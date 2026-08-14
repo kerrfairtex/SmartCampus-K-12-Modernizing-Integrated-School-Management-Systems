@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Unit\App;
+namespace Tests\Unit\App;
 
 use App\Form;
 use App\School;
