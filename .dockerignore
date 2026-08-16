@@ -1,9 +1,7 @@
 .git
 .gitignore
 .env
-.env.*
 Dockerfile
-docker-entrypoint.sh
 .dockerignore
 node_modules
 vendor

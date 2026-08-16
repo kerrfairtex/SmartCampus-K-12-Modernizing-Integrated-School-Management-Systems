@@ -23,11 +23,8 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
-# .env placeholder so the app can bootstrap; real .env is written at runtime by the entrypoint
-RUN cp .env.example .env
-
-# --no-scripts: artisan commands can't run during build (no real .env yet);
-# the entrypoint runs package:discover / passport:keys / migrate / cache at startup
+# --no-scripts: no artisan commands run during build (no .env yet);
+# the entrypoint writes .env and runs package:discover / passport:keys / migrate / cache
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts
 
 # Writable dirs
