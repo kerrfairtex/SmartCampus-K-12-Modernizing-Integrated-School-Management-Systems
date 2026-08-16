@@ -23,10 +23,12 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
-# Throwaway .env so composer post-install scripts can bootstrap during build
-RUN cp .env.example .env && php artisan key:generate --force
+# .env placeholder so the app can bootstrap; real .env is written at runtime by the entrypoint
+RUN cp .env.example .env
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+# --no-scripts: artisan commands can't run during build (no real .env yet);
+# the entrypoint runs package:discover / passport:keys / migrate / cache at startup
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts
 
 # Writable dirs
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
