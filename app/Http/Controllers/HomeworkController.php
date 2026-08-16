@@ -66,7 +66,7 @@ class HomeworkController extends Controller
      */
     public function show($id)
     {
-        return HomeworkResource(Homework::find($id));
+        return new HomeworkResource(Homework::find($id));
     }
 
     /**

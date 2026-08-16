@@ -13,4 +13,12 @@ class Homework extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    /**
+     * Get the section record associated with the homework.
+    */
+    public function section()
+    {
+        return $this->belongsTo('App\Section');
+    }
 }
