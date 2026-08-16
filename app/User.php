@@ -73,6 +73,11 @@ class User extends Model implements
 
     public function hasRole(string $role): bool
     {
+        // A read-only guest can navigate (view) every role's sections.
+        if ($this->role === 'guest') {
+            return true;
+        }
+
         return $this->role == $role ? true : false;
     }
 }
