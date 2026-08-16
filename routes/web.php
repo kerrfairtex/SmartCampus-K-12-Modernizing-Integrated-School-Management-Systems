@@ -269,3 +269,27 @@ Route::middleware(['auth','student'])->prefix('stripe')->group(function(){
   Route::post('charge','CashierController@store');
   Route::get('receipts', 'PaymentController@index');
 });
+
+// FAQ / Feedback / Homework — JSON API controllers exposed as session-auth web routes
+Route::middleware(['auth'])->group(function () {
+    // FAQ
+    Route::get('faqs', 'FaqController@index');
+    Route::post('faq', 'FaqController@store');
+    Route::get('faq/{id}', 'FaqController@show');
+    Route::put('faq/{id}', 'FaqController@update');
+    Route::delete('faq/{id}', 'FaqController@destroy');
+
+    // Feedback
+    Route::get('feedbacks/{student_id}', 'FeedbackController@index');
+    Route::post('feedback', 'FeedbackController@store');
+    Route::get('feedback/{id}', 'FeedbackController@show');
+    Route::put('feedback/{id}', 'FeedbackController@update');
+    Route::delete('feedback/{id}', 'FeedbackController@destroy');
+
+    // Homework
+    Route::get('homeworks/{teacher_id}/{section_id}', 'HomeworkController@index');
+    Route::post('homework', 'HomeworkController@store');
+    Route::get('homework/{id}', 'HomeworkController@show');
+    Route::put('homework/{id}', 'HomeworkController@update');
+    Route::delete('homework/{id}', 'HomeworkController@destroy');
+});
