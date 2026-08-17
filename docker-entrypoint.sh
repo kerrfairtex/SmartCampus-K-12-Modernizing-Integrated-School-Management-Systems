@@ -92,4 +92,19 @@ cat > /etc/apache2/sites-available/000-default.conf <<CONF
 </VirtualHost>
 CONF
 
+# --- Apache MPM fix (AH00534 -> crash -> Railway 502) ---
+# php:8.1-apache ships BOTH mpm_event and mpm_prefork enabled via symlinks in
+# mods-enabled. Apache refuses to start with more than one MPM loaded. Keep
+# only mpm_prefork (required by mod_php). Runtime removal is deterministic;
+# build-time removal is defeated by Railway layer caching.
+rm -f /etc/apache2/mods-enabled/mpm_event.load \
+      /etc/apache2/mods-enabled/mpm_event.conf \
+      /etc/apache2/mods-enabled/mpm_worker.load \
+      /etc/apache2/mods-enabled/mpm_worker.conf
+
+# Silence the AH00558 FQDN warning (cosmetic)
+if ! grep -q '^ServerName' /etc/apache2/apache2.conf; then
+    echo "ServerName localhost" >> /etc/apache2/apache2.conf
+fi
+
 exec apache2-foreground
