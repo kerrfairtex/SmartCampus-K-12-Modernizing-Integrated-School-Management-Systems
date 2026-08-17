@@ -25,10 +25,11 @@ COPY . /var/www/html
 
 # --no-scripts: no artisan commands run during build (no .env yet);
 # the entrypoint writes .env and runs package:discover / passport:keys / migrate / cache
-# --prefer-source: clone via git instead of downloading tarballs from
-# codeload.github.com, which rate-limits unauthenticated builds (HTTP 429 ->
-# "Failed to download ... from dist") and makes every build fail ~60 packages in.
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts --prefer-source
+# --prefer-source + preferred-install=source: clone EVERY package via git —
+# never fall back to codeload.github.com tarballs, which rate-limit
+# unauthenticated builds (HTTP 429 -> "Failed to download ... from dist").
+RUN composer config --global preferred-install source \
+    && composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts --prefer-source
 
 # Writable dirs
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
