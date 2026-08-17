@@ -13,7 +13,9 @@ DB_DATABASE="${DB_DATABASE:-postgres}"
 DB_USERNAME="${DB_USERNAME:-postgres.ebyepweqwihdvjecrufk}"
 DB_PASSWORD="${DB_PASSWORD:-}"
 CACHE_DRIVER="${CACHE_DRIVER:-file}"
-SESSION_DRIVER="${SESSION_DRIVER:-file}"
+# database driver: Railway's filesystem is ephemeral — file sessions vanish on
+# every restart/redeploy, breaking login (CSRF 419). Postgres is always there.
+SESSION_DRIVER="${SESSION_DRIVER:-database}"
 QUEUE_DRIVER="${QUEUE_DRIVER:-sync}"
 FILESYSTEM_DRIVER="${FILESYSTEM_DRIVER:-public}"
 UPLOADS_DISK="${UPLOADS_DISK:-public}"
